@@ -1,7 +1,6 @@
 # Imports 
 import random 
 import heapq
-from math import sqrt
 # Variable Declarations
 map_maze = {
     'A': {
@@ -97,24 +96,10 @@ result = [(first_state, 0)]
 visited = []
 #fronteira que armazenara os estados descobertos em fila de prioridade de acordo com o custo
 frontier = []
-heuristics = {}
 heapq.heappush(frontier, (0, first_state, first_state))
-
-#pré calcula as heuristicas de cada ponto até o ponto do objetivo
-def calc_heuristics():
-    global map_maze
-
-    xGoal, yGoal = map_maze[objective_state]['point']
-
-    for k in map_maze.keys():
-        xState, yState = map_maze[k]['point']
-        heuristics.update({k : sqrt((xState - xGoal)**2) + ((yState - yGoal)**2)})
 
 def get_adjacent(state):
   return map_maze[state]['adjacent']
-
-calc_heuristics()
-print(heuristics)
 
 while len(frontier) != 0:
 
@@ -131,7 +116,7 @@ while len(frontier) != 0:
     
     for child in get_adjacent(state_):
       if (child[0] not in visited):
-        count_cost = cost + child[1] + heuristics[child[0]]
+        count_cost = cost + child[1]
         result.append((state_ + '->' + child[0], count_cost))
         #adiciona a fronteira o custo, o nome do estado adjacente e o caminho para chegar até ele
         heapq.heappush(frontier, (count_cost, child[0], path + '->' + child[0]))
